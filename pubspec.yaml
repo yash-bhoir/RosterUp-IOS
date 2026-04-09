@@ -1,0 +1,74 @@
+name: rosterup
+description: RosterUp - Fantasy Esports App
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Routing
+  go_router: ^14.2.0
+
+  # Networking
+  dio: ^5.4.3
+  json_annotation: ^4.9.0
+
+  # Storage
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.2.3
+
+  # UI
+  cached_network_image: ^3.3.1
+  smooth_page_indicator: ^1.1.0
+  pin_code_fields: ^8.0.1
+  shimmer: ^3.0.0
+  flutter_svg: ^2.0.10
+  google_fonts: ^6.2.1
+
+  # Firebase
+  firebase_core: ^3.1.0
+  firebase_messaging: ^15.0.0
+
+  # Utils
+  url_launcher: ^6.2.6
+  share_plus: ^9.0.0
+  image_picker: ^1.1.2
+  connectivity_plus: ^6.0.3
+  talker_flutter: ^4.1.4
+  infinite_scroll_pagination: ^4.0.0
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.9
+  json_serializable: ^6.8.0
+  mocktail: ^1.0.3
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter_light.otf
+          weight: 300
+        - asset: assets/fonts/inter_bold.otf
+          weight: 700
+        - asset: assets/fonts/inter_black.otf
+          weight: 900
