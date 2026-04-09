@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -8,6 +9,7 @@ import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../domain/entities/contest.dart';
 import '../providers/contest_provider.dart';
+import 'contest_detail_screen.dart';
 
 class AllContestsTab extends ConsumerStatefulWidget {
   final int matchId;
@@ -93,19 +95,15 @@ class _AllContestsTabState extends ConsumerState<AllContestsTab> {
 
   void _onContestTap(Contest contest) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => _placeholder('Contest Detail — ${contest.leagueName}'),
+      builder: (_) => ContestDetailScreen(
+        contest: contest,
+        matchId: widget.matchId,
+      ),
     ));
   }
 
   void _onJoinTap(Contest contest) {
-    // TODO: Navigate to team selection / join flow
-  }
-
-  Widget _placeholder(String title) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(child: Text(title)),
-    );
+    context.push('/create-team/${widget.matchId}');
   }
 }
 

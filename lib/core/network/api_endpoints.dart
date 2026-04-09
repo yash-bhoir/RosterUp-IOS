@@ -43,9 +43,10 @@ abstract final class ApiEndpoints {
   static const userTeamsDetail = 'api/v1/contests/user-teams-detail';
   static String myContests(String id) => 'api/v1/contests/my-contests/$id';
 
-  // Leaderboard
+  // Leaderboard & Winnings
   static String usersLeaderboard(String id) => 'api/v1/contests/users-leaderboard/$id';
   static String myLeaderboard(String id) => 'api/v1/contests/my-leaderboard/$id';
+  static String contestWinningsById(String id) => 'api/v1/contests/winnings/$id';
 
   // Points & Scores
   static const fantasyPoints = 'api/v1/fantacy-points';

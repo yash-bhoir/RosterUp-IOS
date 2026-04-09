@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -78,9 +79,7 @@ class ContestDetailScreen extends ConsumerWidget {
                   height: AppSpacing.buttonHeight,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Navigate to team select / join
-                    },
+                    onPressed: () => context.push('/create-team/$matchId'),
                     child: Text(
                       contest.isFree
                           ? 'JOIN FREE'

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -81,9 +82,7 @@ class JoinContestScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // TODO: Navigate to Create Team screen
-        },
+        onPressed: () => context.push('/create-team/$matchId'),
         backgroundColor: AppColors.primaryDark,
         icon: const Icon(Icons.add, color: AppColors.black),
         label: Text(

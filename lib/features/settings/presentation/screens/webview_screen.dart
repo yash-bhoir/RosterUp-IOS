@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/widgets/loading_indicator.dart';
 
-class WebViewScreen extends StatefulWidget {
+class WebViewScreen extends StatelessWidget {
   final String title;
   final String url;
 
@@ -14,23 +13,15 @@ class WebViewScreen extends StatefulWidget {
   });
 
   @override
-  State<WebViewScreen> createState() => _WebViewScreenState();
-}
-
-class _WebViewScreenState extends State<WebViewScreen> {
-  bool _isLoading = true;
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.black,
       appBar: AppBar(
-        title: Text(widget.title, style: AppTypography.labelLarge),
+        title: Text(title, style: AppTypography.labelLarge),
         backgroundColor: AppColors.darkText,
         centerTitle: true,
       ),
-      // Note: Requires webview_flutter package to be added
-      // For now, showing a placeholder with the URL
+      // Requires webview_flutter package — placeholder until added
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +31,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Text(
-                widget.url,
+                url,
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.themeText,
                 ),

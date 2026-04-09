@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_endpoints.dart';
-import '../dto/contest_dto.dart';
-
 final contestRemoteDatasourceProvider =
     Provider<ContestRemoteDatasource>((ref) {
   return ContestRemoteDatasource(ref.watch(dioProvider));
@@ -78,8 +76,7 @@ class ContestRemoteDatasource {
 
   Future<Map<String, dynamic>> getWinnings(String leagueId) async {
     final response = await _dio.get(
-      '${ApiEndpoints.contestsByMatch('')}/../winnings/$leagueId'
-          .replaceAll('//', '/'),
+      ApiEndpoints.contestWinningsById(leagueId),
     );
     return response.data as Map<String, dynamic>;
   }

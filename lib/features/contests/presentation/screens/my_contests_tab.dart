@@ -8,6 +8,7 @@ import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../domain/entities/contest.dart';
 import '../providers/contest_provider.dart';
+import 'contest_detail_screen.dart';
 
 class MyContestsTab extends ConsumerWidget {
   final int matchId;
@@ -45,7 +46,12 @@ class MyContestsTab extends ConsumerWidget {
               return _MyContestCard(
                 myContest: contests[index],
                 onTap: () {
-                  // TODO: Navigate to Contest Detail
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => ContestDetailScreen(
+                      contest: contests[index].league,
+                      matchId: matchId,
+                    ),
+                  ));
                 },
               );
             },
