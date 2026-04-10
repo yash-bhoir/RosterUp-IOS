@@ -24,7 +24,7 @@ class MyContestsTab extends ConsumerWidget {
       error: (e, _) => AppErrorWidget(
         message: e.toString(),
         onRetry: () =>
-            ref.read(myContestsProvider(matchId.toString()).notifier).refresh(),
+            ref.invalidate(myContestsProvider(matchId.toString())),
       ),
       data: (contests) {
         if (contests.isEmpty) {
@@ -35,9 +35,8 @@ class MyContestsTab extends ConsumerWidget {
         }
         return RefreshIndicator(
           color: AppColors.primaryDark,
-          onRefresh: () => ref
-              .read(myContestsProvider(matchId.toString()).notifier)
-              .refresh(),
+          onRefresh: () async =>
+              ref.invalidate(myContestsProvider(matchId.toString())),
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
             itemCount: contests.length,

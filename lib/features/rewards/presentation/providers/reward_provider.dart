@@ -24,21 +24,13 @@ class RewardCategoriesNotifier extends AsyncNotifier<List<RewardCategory>> {
   }
 }
 
-final couponsByCategoryProvider = AsyncNotifierFamilyProvider<
-    CouponsByCategoryNotifier, List<Coupon>, String>(
-  CouponsByCategoryNotifier.new,
-);
-
-class CouponsByCategoryNotifier
-    extends FamilyAsyncNotifier<List<Coupon>, String> {
-  @override
-  Future<List<Coupon>> build(String arg) async {
-    final ds = ref.read(rewardRemoteDatasourceProvider);
-    final json = await ds.getCouponsByCategory(arg);
-    final data = json['data'] as List<dynamic>? ?? [];
-    return data.map((e) => _parseCoupon(e as Map<String, dynamic>)).toList();
-  }
-}
+final couponsByCategoryProvider =
+    FutureProvider.family<List<Coupon>, String>((ref, categoryId) async {
+  final ds = ref.read(rewardRemoteDatasourceProvider);
+  final json = await ds.getCouponsByCategory(categoryId);
+  final data = json['data'] as List<dynamic>? ?? [];
+  return data.map((e) => _parseCoupon(e as Map<String, dynamic>)).toList();
+});
 
 final userCouponsProvider =
     AsyncNotifierProvider<UserCouponsNotifier, List<Coupon>>(

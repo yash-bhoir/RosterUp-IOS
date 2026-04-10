@@ -66,7 +66,7 @@ class ProfileRepository {
         dateOfBirth: dateOfBirth,
         gender: gender,
       );
-      if (json['status'] == true) return const Result.success(null);
+      if (json['status'] == true) return Result.success(null);
       return Result.failure(
           ServerFailure(json['message']?.toString() ?? 'Failed'));
     } on DioException catch (e) {
@@ -79,7 +79,7 @@ class ProfileRepository {
   Future<Result<void>> deleteAccount() async {
     try {
       final json = await _remote.deleteAccount();
-      if (json['status'] == true) return const Result.success(null);
+      if (json['status'] == true) return Result.success(null);
       return Result.failure(
           ServerFailure(json['message']?.toString() ?? 'Failed'));
     } on DioException catch (e) {

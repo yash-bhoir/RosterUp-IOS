@@ -35,7 +35,7 @@ class JoinContestScreen extends ConsumerWidget {
         error: (e, _) => AppErrorWidget(
           message: e.toString(),
           onRetry: () =>
-              ref.read(matchDetailProvider(matchId.toString()).notifier).refresh(),
+              ref.invalidate(matchDetailProvider(matchId.toString())),
         ),
         data: (detail) => Column(
           children: [

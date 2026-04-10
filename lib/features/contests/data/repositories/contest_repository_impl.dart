@@ -124,7 +124,7 @@ class ContestRepositoryImpl implements ContestRepository {
         userTeamId: userTeamId,
       );
       if (json['status'] == true) {
-        return const Result.success(null);
+        return Result.success(null);
       }
       return Result.failure(
           ServerFailure(json['message']?.toString() ?? 'Failed to join'));

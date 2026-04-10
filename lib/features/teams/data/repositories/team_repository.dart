@@ -76,7 +76,7 @@ class TeamRepository {
         captainId: captainId,
         viceCaptainId: viceCaptainId,
       );
-      if (json['status'] == true) return const Result.success(null);
+      if (json['status'] == true) return Result.success(null);
       return Result.failure(
           ServerFailure(json['message']?.toString() ?? 'Failed'));
     } on DioException catch (e) {

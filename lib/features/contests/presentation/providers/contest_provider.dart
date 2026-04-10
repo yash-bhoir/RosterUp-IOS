@@ -5,51 +5,52 @@ import '../../domain/entities/match_detail.dart';
 
 // Match detail for the contest screen
 final matchDetailProvider =
-    AsyncNotifierFamilyProvider<MatchDetailNotifier, MatchDetail, String>(
-  MatchDetailNotifier.new,
-);
-
-class MatchDetailNotifier extends FamilyAsyncNotifier<MatchDetail, String> {
-  @override
-  Future<MatchDetail> build(String arg) async {
-    final repo = ref.read(contestRepositoryProvider);
-    final result = await repo.getMatchDetail(arg);
-    return result.when(
-      success: (data) => data,
-      failure: (e) => throw e,
-    );
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => build(arg));
-  }
-}
+    FutureProvider.family<MatchDetail, String>((ref, matchId) async {
+  final repo = ref.read(contestRepositoryProvider);
+  final result = await repo.getMatchDetail(matchId);
+  return result.when(
+    success: (data) => data,
+    failure: (e) => throw e,
+  );
+});
 
 // All contests for a match — paginated
-final allContestsProvider = AsyncNotifierFamilyProvider<AllContestsNotifier,
-    PaginatedContestsState, String>(
-  AllContestsNotifier.new,
+final allContestsProvider =
+    StateNotifierProvider.family<AllContestsNotifier, AsyncValue<PaginatedContestsState>, String>(
+  (ref, matchId) => AllContestsNotifier(ref, matchId),
 );
 
-class AllContestsNotifier
-    extends FamilyAsyncNotifier<PaginatedContestsState, String> {
-  @override
-  Future<PaginatedContestsState> build(String arg) => _fetch(arg, 1);
+class AllContestsNotifier extends StateNotifier<AsyncValue<PaginatedContestsState>> {
+  final Ref _ref;
+  final String _matchId;
 
-  Future<PaginatedContestsState> _fetch(String matchId, int page) async {
-    final repo = ref.read(contestRepositoryProvider);
-    final result = await repo.getContestsByMatch(matchId, page: page);
-    return result.when(
-      success: (data) => PaginatedContestsState(
-        contests: page == 1
-            ? data.contests
-            : [...(state.valueOrNull?.contests ?? []), ...data.contests],
-        page: data.page,
-        totalPages: data.totalPages,
-        isLoadingMore: false,
-      ),
-      failure: (e) => throw e,
+  AllContestsNotifier(this._ref, this._matchId)
+      : super(const AsyncLoading()) {
+    _fetch(1);
+  }
+
+  Future<void> _fetch(int page) async {
+    if (page == 1) state = const AsyncLoading();
+    final repo = _ref.read(contestRepositoryProvider);
+    final result = await repo.getContestsByMatch(_matchId, page: page);
+    result.when(
+      success: (data) {
+        state = AsyncData(PaginatedContestsState(
+          contests: page == 1
+              ? data.contests
+              : [...(state.valueOrNull?.contests ?? []), ...data.contests],
+          page: data.page,
+          totalPages: data.totalPages,
+          isLoadingMore: false,
+        ));
+      },
+      failure: (e) {
+        if (page == 1) {
+          state = AsyncError(e, StackTrace.current);
+        } else {
+          state = AsyncData(state.valueOrNull!.copyWith(isLoadingMore: false));
+        }
+      },
     );
   }
 
@@ -57,79 +58,46 @@ class AllContestsNotifier
     final current = state.valueOrNull;
     if (current == null || !current.hasMore || current.isLoadingMore) return;
     state = AsyncData(current.copyWith(isLoadingMore: true));
-    try {
-      final newState = await _fetch(arg, current.page + 1);
-      state = AsyncData(newState);
-    } catch (e) {
-      state = AsyncData(current.copyWith(isLoadingMore: false));
-    }
+    await _fetch(current.page + 1);
   }
 
   Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _fetch(arg, 1));
+    await _fetch(1);
   }
 }
 
 // My contests for a match
 final myContestsProvider =
-    AsyncNotifierFamilyProvider<MyContestsNotifier, List<MyContest>, String>(
-  MyContestsNotifier.new,
-);
-
-class MyContestsNotifier extends FamilyAsyncNotifier<List<MyContest>, String> {
-  @override
-  Future<List<MyContest>> build(String arg) async {
-    final repo = ref.read(contestRepositoryProvider);
-    final result = await repo.getMyContests(arg);
-    return result.when(
-      success: (data) => data,
-      failure: (e) => throw e,
-    );
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => build(arg));
-  }
-}
+    FutureProvider.family<List<MyContest>, String>((ref, matchId) async {
+  final repo = ref.read(contestRepositoryProvider);
+  final result = await repo.getMyContests(matchId);
+  return result.when(
+    success: (data) => data,
+    failure: (e) => throw e,
+  );
+});
 
 // Leaderboard for a contest
-final leaderboardProvider = AsyncNotifierFamilyProvider<LeaderboardNotifier,
-    List<LeaderboardEntry>, String>(
-  LeaderboardNotifier.new,
-);
-
-class LeaderboardNotifier
-    extends FamilyAsyncNotifier<List<LeaderboardEntry>, String> {
-  @override
-  Future<List<LeaderboardEntry>> build(String arg) async {
-    final repo = ref.read(contestRepositoryProvider);
-    final result = await repo.getLeaderboard(arg);
-    return result.when(
-      success: (data) => data,
-      failure: (e) => throw e,
-    );
-  }
-}
+final leaderboardProvider =
+    FutureProvider.family<List<LeaderboardEntry>, String>((ref, leagueId) async {
+  final repo = ref.read(contestRepositoryProvider);
+  final result = await repo.getLeaderboard(leagueId);
+  return result.when(
+    success: (data) => data,
+    failure: (e) => throw e,
+  );
+});
 
 // Winnings for a contest
 final winningsProvider =
-    AsyncNotifierFamilyProvider<WinningsNotifier, List<WinningSlot>, String>(
-  WinningsNotifier.new,
-);
-
-class WinningsNotifier extends FamilyAsyncNotifier<List<WinningSlot>, String> {
-  @override
-  Future<List<WinningSlot>> build(String arg) async {
-    final repo = ref.read(contestRepositoryProvider);
-    final result = await repo.getWinnings(arg);
-    return result.when(
-      success: (data) => data,
-      failure: (e) => throw e,
-    );
-  }
-}
+    FutureProvider.family<List<WinningSlot>, String>((ref, leagueId) async {
+  final repo = ref.read(contestRepositoryProvider);
+  final result = await repo.getWinnings(leagueId);
+  return result.when(
+    success: (data) => data,
+    failure: (e) => throw e,
+  );
+});
 
 // Join contest action
 final joinContestProvider =

@@ -62,20 +62,20 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             AppSpacing.gapVMd,
             AppInput(
               controller: _emailController,
-              label: 'Email',
+              labelText: 'Email',
               hintText: 'Enter email',
               keyboardType: TextInputType.emailAddress,
             ),
             AppSpacing.gapVLg,
             AppInput(
               controller: _stateController,
-              label: 'State',
+              labelText: 'State',
               hintText: 'Enter state',
             ),
             AppSpacing.gapVLg,
             AppInput(
               controller: _dobController,
-              label: 'Date of Birth',
+              labelText: 'Date of Birth',
               hintText: 'YYYY-MM-DD',
               readOnly: true,
               onTap: _pickDate,

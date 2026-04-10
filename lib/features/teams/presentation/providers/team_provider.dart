@@ -5,21 +5,14 @@ import '../../domain/entities/player.dart';
 
 // Fetch match players
 final matchPlayersProvider =
-    AsyncNotifierFamilyProvider<MatchPlayersNotifier, List<Player>, String>(
-  MatchPlayersNotifier.new,
-);
-
-class MatchPlayersNotifier extends FamilyAsyncNotifier<List<Player>, String> {
-  @override
-  Future<List<Player>> build(String arg) async {
-    final repo = ref.read(teamRepositoryProvider);
-    final result = await repo.getMatchPlayers(arg);
-    return result.when(
-      success: (data) => data,
-      failure: (e) => throw e,
-    );
-  }
-}
+    FutureProvider.family<List<Player>, String>((ref, matchId) async {
+  final repo = ref.read(teamRepositoryProvider);
+  final result = await repo.getMatchPlayers(matchId);
+  return result.when(
+    success: (data) => data,
+    failure: (e) => throw e,
+  );
+});
 
 // Team creation state
 final teamBuilderProvider =
